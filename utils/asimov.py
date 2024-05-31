@@ -29,11 +29,40 @@ class Asimov:
                  '17\nWar', '18\nGhost of a World', '19\nEnd of War', '20\n\n"I Know ..."', '21\nThe Answer That Satisfied','22\nThe Answer That Was True']
                    ]
         
-        self.known_character = ['Hari Seldon', 'Gaal Dornick', 'Jerril', 'Linge Chen', 'Lors Avakim', 'Salvor Hardin', 'Bor Alurin', 'Jord Fara', 
-                                'Lewis Pirenne', 'Lundin Crast', 'Lord Dorwin', 'Tomaz Sutt', 'Yate Fulham', 'Yohan Lee', 'Dokor Walto', 'Jaim Orsy',
-                                'King Lepold I', 'Lem Tarki', 'Levi Norast', 'Lewis Bort', 'Prince Lefkin', 'Prince Regent Wienis', 'Poly Verisof',
-                                'Sef Sermak', 'Theo Aporat', 'Eskel Gorov', 'Limmar Ponyets', 'Les Gorm', 'Hober Mallow', 'Publis Manlio',
-                                'Jorane Sutt', 'Jaim Twer']
+        self.characters = {
+                'Hari Seldon': ['Hari Seldon', 'Hari', 'Seldon'],
+                'Gaal Dornick': ['Gaal Dornick', 'Gaal', 'Dornick'],
+                'Jerril': ['Jerril'],
+                'Linge Chen': ['Linge Chen', 'Linge', 'Chen'],
+                'Lors Avakim': ['Lors Avakim', 'Lors', 'Avakim'],
+                'Salvor Hardin': ['Salvor Hardin', 'Salvor', 'Hardin'],
+                'Bor Alurin': ['Bor Alurin', 'Bor', 'Alurin'],
+                'Jord Fara': ['Jord Fara', 'Jord', 'Fara'],
+                'Lewis Pirenne': ['Lewis Pirenne', 'Lewis', 'Pirenne'],
+                'Lundin Crast': ['Lundin Crast', 'Lundin', 'Crast'],
+                'Lord Dorwin': ['Lord Dorwin', 'Dorwin'],
+                'Tomaz Sutt': ['Tomaz Sutt', 'Tomaz', 'Sutt'],
+                'Yate Fulham': ['Yate Fulham', 'Yate', 'Fulham'],
+                'Yohan Lee': ['Yohan Lee', 'Yohan', 'Lee'],
+                'Dokor Walto': ['Dokor Walto', 'Dokor', 'Walto'],
+                'Jaim Orsy': ['Jaim Orsy', 'Jaim', 'Orsy'],
+                'King Lepold I': ['King Lepold I', 'King', 'Lepold', 'Lepold I'],
+                'Lem Tarki': ['Lem Tarki', 'Lem', 'Tarki'],
+                'Levi Norast': ['Levi Norast', 'Levi', 'Norast'],
+                'Lewis Bort': ['Lewis Bort', 'Lewis', 'Bort'],
+                'Prince Lefkin': ['Prince Lefkin', 'Prince', 'Lefkin'],
+                'Prince Regent Wienis': ['Prince Regent Wienis', 'Prince', 'Regent', 'Wienis'],
+                'Poly Verisof': ['Poly Verisof', 'Poly', 'Verisof'],
+                'Sef Sermak': ['Sef Sermak', 'Sef', 'Sermak'],
+                'Theo Aporat': ['Theo Aporat', 'Theo', 'Aporat'],
+                'Eskel Gorov': ['Eskel Gorov', 'Eskel', 'Gorov'],
+                'Limmar Ponyets': ['Limmar Ponyets', 'Limmar', 'Ponyets'],
+                'Les Gorm': ['Les Gorm', 'Les', 'Gorm'],
+                'Hober Mallow': ['Hober Mallow', 'Hober', 'Mallow'],
+                'Publis Manlio': ['Publis Manlio', 'Publis', 'Manlio'],
+                'Jorane Sutt': ['Jorane Sutt', 'Jorane', 'Sutt'],
+                'Jaim Twer': ['Jaim Twer', 'Jaim', 'Twer'],
+                } 
 
     def path(self):
         return self._path

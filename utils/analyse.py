@@ -1,25 +1,34 @@
 import pandas as pd
+import re
 from datetime import datetime
 import networkx
-import matplotlib.pyplot as plt
-from collections import Counter
+from collections import Counter, defaultdict
 
 class Analyse:
-    def __init__(self, entities, events, interactions, sentiments) -> None:
+    def __init__(self, entities) -> None:
         self.entities = entities
-        self.events = events
-        self.interactions = interactions
-        self.sentiments = sentiments
 
-    @staticmethod
-    def count_entities_per_chapter(entities):
+    def count_entities_per_chapter(self):
         entity_counts = []
-        for book in entities:
+        for book in self.entities:
             temp = {}
             for chapter, ents in book:
                 temp[chapter] = len(ents)
             entity_counts.append(temp)
         return entity_counts
+    
+    def count_character_instances(self, characters, trilogy):
+        counts = []
+        for book in trilogy:
+            temp = {}
+            for chapter, text in book.items():
+                char_temp = {}
+                for character, aliases in characters.items():
+                    for alias in aliases:
+                        char_temp[character] += len(re.findall(r'\b' + re.escape(alias) + r'\b', text, re.IGNORECASE))
+                temp[chapter] = char_temp
+            counts.append(temp)
+        return counts
 
     @staticmethod
     def get_characters(entities):
