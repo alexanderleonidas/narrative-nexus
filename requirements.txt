@@ -1,0 +1,8 @@
+num2words
+fitz
+re
+stanza
+tqdm
+collections
+pickle
+pandas
