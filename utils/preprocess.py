@@ -3,15 +3,14 @@ import fitz
 from num2words import num2words
 from utils.asimov import Asimov
 
-class Preprocess:
-    def __init__(self, asimov: Asimov) -> None:
-        self.path = asimov.path()
-        self.chapter_headers = asimov.chapter_headers()
+class Preprocess(Asimov):
+    def __init__(self) -> None:
+        super().__init__()
     
     def preprocess_asimov(self):
-        trilogy = self.extract_books(self.extract_pages_from_pdf(self.path))
+        trilogy = self.extract_books(self.extract_pages())
         # Split the books up into chapters and paragraphs and get the raw text
-        trilogy = [self.extract_chapters(book, self.chapter_headers[i]) for i, book in enumerate(trilogy)]
+        trilogy = [self.extract_chapters(book, self.chapter_headers_preprocess()[i]) for i, book in enumerate(trilogy)]
         # Remove the last chapter of the first book as it is about the author
         trilogy[0].popitem()
 
@@ -21,9 +20,9 @@ class Preprocess:
         # Split up the books and clean the text
         # It is known that the cover page of each book start at page 8, 168, and 331 respectively
         books = [
-            self.clean_text(self.join_text(pages[8:167])),
-            self.clean_text(self.join_text(pages[167:331])),
-            self.clean_text(self.join_text(pages[331:]))
+            self.join_text(pages[8:167]),
+            self.join_text(pages[167:331]),
+            self.join_text(pages[331:])
         ]
 
         # Now remove the contents of each book
@@ -32,16 +31,16 @@ class Preprocess:
         books[2] = self.remove_substring(books[2], 'Contents PROLOGUE PART I SEARCH BY THE MULE 1. TWO MEN AND THE MULE First Interlude 2. TWO MEN WITHOUT THE MULE Second Interlude 3. TWO MEN AND A PEASANT Third Interlude 4. TWO MEN AND THE ELDERS Fourth Interlude 5. ONE MAN AND THE MULE 6. ONE MAN, THE MULE – AND ANOTHER Last Interlude PART II SEARCH BY THE FOUNDATION 7. ARCADIA 8. SELDON\'S PLAN 9. THE CONSPIRATORS 10. APPROACHING CRISIS 11. STOWAWAY 12. LORD  13. LADY 14. ANXIETY 15. THROUGH THE GRID 16. BEGINNING OF WAR 17. WAR 18. GHOST OF A WORLD 19. END OF WAR 20. "I KNOW ..." 21. THE ANSWER THAT SATISFIED 22. THE ANSWER THAT WAS TRUE ')
 
         return books
-
     
     def extract_chapters(self, text: str, headers):
+        CLEAN = False
         results = {}
         for i in range(len(headers) - 1):
             sub1, sub2 = headers[i], headers[i + 1] # Set two substrings
             try: # Get the text in between the two substrings
                 after_sub1 = text.split(sub1, 1)[1]
                 result = after_sub1.split(sub2, 1)[0]
-                results[sub1] = result.strip()
+                results[sub1] = self.clean_text(result.strip()) if CLEAN else result.strip()
 
             except IndexError:
                 results[sub1] = None
@@ -49,18 +48,22 @@ class Preprocess:
         if headers and headers[-1] in text:
             last_header_index = text.index(headers[-1]) + len(headers[-1])
             remaining_text = text[last_header_index:]
-            results[headers[-1]] = remaining_text.strip()
+            results[headers[-1]] = self.clean_text(remaining_text.strip()) if CLEAN else remaining_text.strip()
             
         return results
     
-    def clean_text(self, text: str, all=False):
-        if all:
-            text = self.convert_to_lowercase(text)
-            text = self.remove_punctuation(text)
-            text = self.convert_numbers_to_words(text) 
-        text = self.remove_escape_chars(text)
+    def clean_text(self, text: str):
+        text = self.convert_to_lowercase(text)
+        text = self.remove_punctuation(text)
+        text = self.convert_numbers_to_words(text) 
         return text
 
+    def extract_pages(self):
+        doc = fitz.open(self.path())
+        pages = [page.get_text() for page in doc]
+        doc.close()
+        return [self.remove_escape_chars(page) for page in pages]
+    
     @staticmethod
     def remove_escape_chars(text: str):
         return re.sub(r'\n+', ' ', text)
@@ -90,11 +93,4 @@ class Preprocess:
             return num2words(number)
         # Replacing all occurrences of numbers in the text with their word equivalents
         cleaned_text = re.sub(r'\b\d+\b', replace_with_words, text)
-        return cleaned_text
-
-    @staticmethod
-    def extract_pages_from_pdf(pdf_path: str):
-        doc = fitz.open(pdf_path)
-        pages = [page.get_text() for page in doc]
-        doc.close()
-        return [page for page in pages]    
+        return cleaned_text 
