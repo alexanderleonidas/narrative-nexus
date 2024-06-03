@@ -43,7 +43,7 @@ def get_information(tok=True,ent=False,rel=False,sent=False):
                 stanford.convert_to_document(text)
                 tokens_temp[chapter] = stanford.get_tokens() if tok else None
                 entities_temp[chapter] = stanford.extract_named_entities() if ent else None
-                events_temp[chapter], interactions_temp[chapter] = stanford.extract_person_relationships() if rel else None
+                events_temp[chapter], interactions_temp[chapter] = stanford.extract_person_relationships() if rel else None, None
                 sentiments_temp[chapter] = stanford.extract_sentiment() if sent else None
         
         tokens.append(tokens_temp)
